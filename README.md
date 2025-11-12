@@ -17,3 +17,12 @@ docker run --rm hello-python
 ```
 Hello, Docker!
 ```
+
+## Run with Nomad
+1. Ensure Docker and Nomad are installed.
+2. Build the Docker image locally:
+   ```bash
+   docker build -t hello-python .
+3. Run the Nomad job:
+   ```bash
+   nomad job run nomad/hello.nomad
