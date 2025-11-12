@@ -1,0 +1,45 @@
+# Loki Setup and Log Forwarding Guide
+
+## 1. Start Loki (Docker)
+
+# Pull and run the Loki container locally using Docker
+docker run -d --name=loki -p 3100:3100 \
+  -v $(pwd)/loki-config.yml:/etc/loki/local-config.yaml \
+  grafana/loki:2.9.0
+
+# Loki will now be running on http://localhost:3100
+
+## 2. Forward Nomad or Container Logs to Loki
+
+# Option A: For Nomad job logs, configure a "driver = docker" task
+# and set Docker logging driver to Loki (in Nomad client config)
+# Example Nomad client config snippet:
+plugin "docker" {
+  config {
+    logging {
+      driver = "loki"
+      options {
+        loki-url = "http://localhost:3100/loki/api/v1/push"
+      }
+    }
+  }
+}
+
+# Option B: For a standalone Docker container:
+docker run --log-driver=loki \
+  --log-opt loki-url="http://localhost:3100/loki/api/v1/push" \
+  hello-python
+
+## 3. Viewing Logs
+
+# Use 'docker logs' to view local logs:
+docker logs hello-python
+
+# OR query logs directly from Loki using curl:
+curl -G "http://localhost:3100/loki/api/v1/query" \
+  --data-urlencode 'query={job="docker"}'
+
+# OR use Grafana for visualization:
+# 1. Open Grafana (http://localhost:3000)
+# 2. Add Loki as a data source (http://localhost:3100)
+# 3. Explore logs in Grafana’s UI.
