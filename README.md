@@ -18,3 +18,32 @@ docker run --rm hello-python
 ```
 Hello, Docker!
 ```
+## Run with Nomad
+1. Ensure Docker and Nomad are installed.
+2. Build the Docker image locally:
+   ```bash
+   docker build -t hello-python .
+3. Run the Nomad job:
+   ```bash
+   nomad job run nomad/hello.nomad
+
+## Monitoring with Loki
+1. Start Loki locally using Docker:
+   ```bash
+   docker run -d --name=loki -p 3100:3100 grafana/loki:2.9.0
+2. Forward container logs to Loki:
+   ```bash
+   docker run --log-driver=loki \
+  --log-opt loki-url="http://localhost:3100/loki/api/v1/push" \
+  hello-python
+3. View logs:
+   Using Docker:
+   ```bash
+    docker logs hello-python
+```
+  Using Loki API:
+  ```bash
+curl -G "http://localhost:3100/loki/api/v1/query" \
+  --data-urlencode 'query={job="docker"}'
+```
+Or visualize logs in Grafana by adding Loki as a data source.
