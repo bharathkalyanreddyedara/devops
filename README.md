@@ -48,3 +48,28 @@ curl -G "http://localhost:3100/loki/api/v1/query" \
   --data-urlencode 'query={job="docker"}'
 ```
 Or visualize logs in Grafana by adding Loki as a data source.
+
+---
+
+## 🧠 MLflow Tracking
+
+You can log a simple dummy experiment using **MLflow** to simulate experiment tracking.
+
+### 1. Install MLflow
+```bash
+pip install mlflow
+```
+### 2. Run the dummy experiment
+```bash
+python mlflow/track_experiment.py
+```
+
+### 3. View the experiment UI
+```bash
+mlflow ui
+```
+Then open your browser at:
+```bash
+http://localhost:5000
+```
+You’ll see the logged experiment named hello_docker_experiment with one run containing a parameter and a metric.
