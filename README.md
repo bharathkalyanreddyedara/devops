@@ -34,13 +34,14 @@ Hello, Docker!
 2. Forward container logs to Loki:
    ```bash
    docker run --log-driver=loki \
-  --log-opt loki-url="http://localhost:3100/loki/api/v1/push" \
-  hello-python
+   --log-opt loki-url="http://localhost:3100/loki/api/v1/push" \
+   hello-python
+   ```
 3. View logs:
    Using Docker:
    ```bash
     docker logs hello-python
-```
+
   Using Loki API:
   ```bash
 curl -G "http://localhost:3100/loki/api/v1/query" \
